@@ -2,12 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/types/module"
 	"io/ioutil"
 	"os"
 	"path"
-
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -145,8 +144,8 @@ func initConfig(cmd *cobra.Command) error {
 	}
 
 	debug, err := cmd.Flags().GetBool("debug")
-	if err != nil {
-		return err
+	if err != nil { // TODO: handle this hack better
+		debug = false
 	}
 
 	config = &Config{}
@@ -209,4 +208,12 @@ func initConfig(cmd *cobra.Command) error {
 		os.Exit(1)
 	}
 	return nil
+}
+
+func GetConfig() (*Config, error) {
+	var err error
+	if config == nil {
+		err = initConfig(NewRootCmd())
+	}
+	return config, err
 }
