@@ -210,9 +210,9 @@ func initConfig(cmd *cobra.Command) error {
 	return nil
 }
 
-func GetConfig() (*Config, error) {
+func GetConfig(reload bool) (*Config, error) {
 	var err error
-	if config == nil {
+	if config == nil || reload {
 		err = initConfig(NewRootCmd())
 	}
 	return config, err
